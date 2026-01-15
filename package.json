@@ -1,5 +1,6 @@
 {
-  "name": "BigTimer",
+  "name": "bigtimer",
+  "title": "Big Timer",
   "author": "Bilal Soylu",
   "private": true,
   "version": "1.0.1",
