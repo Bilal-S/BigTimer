@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/app_icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Big Timer 🕒</title>
+  <meta name="description" content="High-visibility, distraction-free timer for presenters." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@900&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#000000" />
+</head>
+
+<body>
+  <div id="app">
+    <!-- Configuration Mode -->
+    <section id="config-mode" class="mode active">
+      <header>
+        <h1>Big Timer 🕒</h1>
+      </header>
+      <div class="settings-grid">
+        <div class="setting-item">
+          <label for="timer-duration">Duration (MM:SS)</label>
+          <input type="text" id="timer-duration" placeholder="05:00" inputmode="numeric" />
+          <div class="quick-sets">
+            <button class="quick-btn" data-time="01:00">1m</button>
+            <button class="quick-btn" data-time="02:00">2m</button>
+            <button class="quick-btn" data-time="03:00">3m</button>
+            <button class="quick-btn" data-time="05:00">5m</button>
+            <button class="quick-btn" data-time="10:00">10m</button>
+            <button class="quick-btn" data-time="20:00">20m</button>
+            <button class="quick-btn" data-time="30:00">30m</button>            
+          </div>
+        </div>
+        <div class="setting-item">
+          <label>Themes</label>
+          <div class="theme-toggles">
+            <button class="theme-btn active" data-theme="dark">Dark</button>
+            <button class="theme-btn" data-theme="light">Light</button>
+            <button class="theme-btn" data-theme="custom">Custom</button>
+          </div>
+        </div>
+        <div id="custom-colors" class="setting-item hidden">
+          <label>Custom Colors</label>
+          <div class="color-inputs">
+            <input type="color" id="bg-color" value="#000000" title="Background Color" />
+            <input type="color" id="text-color" value="#ffffff" title="Text Color" />
+          </div>
+        </div>
+      </div>
+      <button id="start-btn" class="primary-btn">START</button>
+    </section>
+
+    <!-- Focus Mode -->
+    <section id="focus-mode" class="mode">
+      <div id="timer-display" class="timer-text">05:00</div>
+      <button id="exit-btn" class="icon-btn" aria-label="Exit Focus Mode">×</button>
+      <button id="fullscreen-btn" class="icon-btn" aria-label="Toggle Fullscreen">⛶</button>
+    </section>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
