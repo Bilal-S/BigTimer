@@ -164,6 +164,26 @@ input[type="color"] {
     opacity: 0.8;
 }
 
+.config-footer {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    opacity: 0.6;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.config-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.config-footer a:hover {
+    text-decoration: underline;
+}
+
 /* Focus Mode Styles */
 #focus-mode {
     padding: 0;

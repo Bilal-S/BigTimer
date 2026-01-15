@@ -2,6 +2,7 @@ import './style.css'
 
 // --- State ---
 let timerInterval = null;
+let wakeLock = null;
 let totalSeconds = 0;
 let remainingSeconds = 0;
 let isOvertime = false;
@@ -112,6 +113,16 @@ function startTimer() {
     focusMode.classList.add('active');
     document.body.classList.remove('overtime');
 
+    // Request screen wake lock to prevent screen from turning off during timer
+    if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen').then(lock => {
+            wakeLock = lock;
+            console.log('Screen wake lock acquired');
+        }).catch(err => {
+            console.log('Failed to acquire wake lock:', err);
+        });
+    }
+
     saveSettings();
 
     timerInterval = setInterval(updateTimer, 1000);
@@ -123,6 +134,13 @@ function stopTimer() {
     configMode.classList.add('active');
     focusMode.classList.remove('active');
     document.body.classList.remove('overtime', 'flash', 'flash-continuous', 'overtime-flash');
+
+    // Release screen wake lock when returning to configuration
+    if (wakeLock) {
+        wakeLock.release();
+        wakeLock = null;
+        console.log('Screen wake lock released');
+    }
 }
 
 function updateTimer() {
