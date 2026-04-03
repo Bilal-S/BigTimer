@@ -6,6 +6,7 @@ let wakeLock = null;
 let totalSeconds = 0;
 let remainingSeconds = 0;
 let isOvertime = false;
+let endTime = 0; // Wall-clock timestamp when timer reaches zero
 let currentSettings = {
     duration: '05:00',
     theme: 'dark',
@@ -66,6 +67,13 @@ function init() {
             saveSettings();
         });
     });
+
+    // Update timer immediately when user returns to the tab
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && timerInterval) {
+            updateTimer();
+        }
+    });
 }
 
 // --- Theme Logic ---
@@ -83,6 +91,7 @@ function applyTheme(theme) {
     } else {
         updateColors();
     }
+
     saveSettings();
 }
 
@@ -107,6 +116,7 @@ function startTimer() {
 
     remainingSeconds = totalSeconds;
     isOvertime = false;
+    endTime = Date.now() + totalSeconds * 1000;
     timerDisplay.textContent = formatTime(remainingSeconds);
 
     configMode.classList.remove('active');
@@ -144,15 +154,20 @@ function stopTimer() {
 }
 
 function updateTimer() {
-    if (!isOvertime) {
-        remainingSeconds--;
-        if (remainingSeconds <= 0) {
+    const now = Date.now();
+    const diffMs = endTime - now;
+
+    if (diffMs > 0) {
+        // Still counting down
+        remainingSeconds = Math.ceil(diffMs / 1000);
+        isOvertime = false;
+    } else {
+        // Timer has reached zero or past it
+        if (!isOvertime) {
             isOvertime = true;
             document.body.classList.add('overtime', 'overtime-flash');
-            remainingSeconds = 0;
         }
-    } else {
-        remainingSeconds++;
+        remainingSeconds = Math.floor(Math.abs(diffMs) / 1000);
     }
 
     const prefix = isOvertime ? '+' : '';

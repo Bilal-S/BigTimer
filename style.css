@@ -45,7 +45,8 @@ body {
 
 /* Config Mode Styles */
 #config-mode {
-    justify-content: center;
+    overflow-y: auto;
+    justify-content: flex-start;
     align-items: center;
     max-width: 600px;
     margin: 0 auto;
@@ -121,10 +122,11 @@ input[type="text"] {
 .theme-btn {
     flex: 1;
     padding: 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgb(160, 160, 160);
+    background: rgba(128, 128, 128, 0.2);
+    border: 2px solid rgba(128, 128, 128, 0.4);
+    color: var(--text-color);
     border-radius: 4px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -132,6 +134,7 @@ input[type="text"] {
 .theme-btn.active {
     background: var(--accent-color);
     border-color: var(--accent-color);
+    color: #ffffff;
 }
 
 .color-inputs {
@@ -165,14 +168,12 @@ input[type="color"] {
 }
 
 .config-footer {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-top: 1.5rem;
     font-size: 0.8rem;
     opacity: 0.6;
     text-align: center;
     color: var(--text-color);
+    flex-shrink: 0;
 }
 
 .config-footer a {
