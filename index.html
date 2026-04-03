@@ -57,7 +57,14 @@
 
     <!-- Focus Mode -->
     <section id="focus-mode" class="mode">
-      <div id="timer-display" class="timer-text">05:00</div>
+      <div id="timer-display" class="timer-text">
+        <span id="overtime-prefix" class="overtime-prefix hidden">+</span>
+        <span class="digit-slot" data-pos="m-tens"><span class="digit-value">0</span></span>
+        <span class="digit-slot" data-pos="m-ones"><span class="digit-value">0</span></span>
+        <span class="digit-colon">:</span>
+        <span class="digit-slot" data-pos="s-tens"><span class="digit-value">0</span></span>
+        <span class="digit-slot" data-pos="s-ones"><span class="digit-value">0</span></span>
+      </div>
       <button id="exit-btn" class="icon-btn" aria-label="Exit Focus Mode">×</button>
       <button id="fullscreen-btn" class="icon-btn" aria-label="Toggle Fullscreen">⛶</button>
     </section>

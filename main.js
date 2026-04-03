@@ -7,6 +7,7 @@ let totalSeconds = 0;
 let remainingSeconds = 0;
 let isOvertime = false;
 let endTime = 0; // Wall-clock timestamp when timer reaches zero
+let prevDigits = { 'm-tens': null, 'm-ones': null, 's-tens': null, 's-ones': null };
 let currentSettings = {
     duration: '05:00',
     theme: 'dark',
@@ -26,6 +27,8 @@ const themeBtns = document.querySelectorAll('.theme-btn');
 const customColors = document.getElementById('custom-colors');
 const bgColorInput = document.getElementById('bg-color');
 const textColorInput = document.getElementById('text-color');
+let overtimePrefix;
+let digitSlots;
 
 // --- Initialization ---
 function init() {
@@ -33,6 +36,14 @@ function init() {
     if (saved) {
         currentSettings = JSON.parse(saved);
     }
+
+    overtimePrefix = document.getElementById('overtime-prefix');
+    digitSlots = {
+        'm-tens': document.querySelector('.digit-slot[data-pos="m-tens"]'),
+        'm-ones': document.querySelector('.digit-slot[data-pos="m-ones"]'),
+        's-tens': document.querySelector('.digit-slot[data-pos="s-tens"]'),
+        's-ones': document.querySelector('.digit-slot[data-pos="s-ones"]'),
+    };
 
     durationInput.value = currentSettings.duration;
     bgColorInput.value = currentSettings.customBg;
@@ -117,7 +128,10 @@ function startTimer() {
     remainingSeconds = totalSeconds;
     isOvertime = false;
     endTime = Date.now() + totalSeconds * 1000;
-    timerDisplay.textContent = formatTime(remainingSeconds);
+
+    // Reset digit tracking so initial display doesn't animate
+    prevDigits = { 'm-tens': null, 'm-ones': null, 's-tens': null, 's-ones': null };
+    updateDisplay(formatTime(remainingSeconds), false);
 
     configMode.classList.remove('active');
     focusMode.classList.add('active');
@@ -145,6 +159,9 @@ function stopTimer() {
     focusMode.classList.remove('active');
     document.body.classList.remove('overtime', 'flash', 'flash-continuous', 'overtime-flash');
 
+    // Reset digit tracking
+    prevDigits = { 'm-tens': null, 'm-ones': null, 's-tens': null, 's-ones': null };
+
     // Release screen wake lock when returning to configuration
     if (wakeLock) {
         wakeLock.release();
@@ -170,8 +187,7 @@ function updateTimer() {
         remainingSeconds = Math.floor(Math.abs(diffMs) / 1000);
     }
 
-    const prefix = isOvertime ? '+' : '';
-    timerDisplay.textContent = prefix + formatTime(Math.abs(remainingSeconds));
+    updateDisplay(formatTime(Math.abs(remainingSeconds)), isOvertime);
     checkAlerts();
 }
 
@@ -181,6 +197,86 @@ function formatTime(sec) {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+// --- Odometer Display Logic ---
+function updateDisplay(timeStr, overtime) {
+    // timeStr is "MM:SS"
+    const digits = {
+        'm-tens': timeStr[0],
+        'm-ones': timeStr[1],
+        's-tens': timeStr[3],
+        's-ones': timeStr[4],
+    };
+
+    for (const [pos, newDigit] of Object.entries(digits)) {
+        if (prevDigits[pos] === null) {
+            // Initial set — no animation
+            const slot = digitSlots[pos];
+            slot.innerHTML = '<span class="digit-value">' + newDigit + '</span>';
+            prevDigits[pos] = newDigit;
+            continue;
+        }
+
+        if (newDigit === prevDigits[pos]) continue; // No change, skip
+
+        animateDigit(pos, prevDigits[pos], newDigit);
+        prevDigits[pos] = newDigit;
+    }
+
+    // Handle overtime prefix visibility
+    if (overtime) {
+        overtimePrefix.classList.remove('hidden');
+        // Force reflow to restart transition if needed
+        void overtimePrefix.offsetWidth;
+        overtimePrefix.classList.add('visible');
+    } else {
+        overtimePrefix.classList.remove('visible');
+        if (!overtimePrefix.classList.contains('visible')) {
+            overtimePrefix.classList.add('hidden');
+        }
+    }
+}
+
+function animateDigit(pos, oldDigit, newDigit) {
+    const slot = digitSlots[pos];
+
+    // Build new slot content:
+    // .digit-value — invisible, maintains slot height
+    // .digit-exit  — old digit, slides up out (absolute positioned)
+    // .digit-enter — new digit, slides up from below (absolute positioned)
+
+    const valueSpan = document.createElement('span');
+    valueSpan.className = 'digit-value';
+    valueSpan.textContent = newDigit;
+    valueSpan.style.visibility = 'hidden';
+
+    const exitSpan = document.createElement('span');
+    exitSpan.className = 'digit-exit';
+    exitSpan.textContent = oldDigit;
+
+    const enterSpan = document.createElement('span');
+    enterSpan.className = 'digit-enter';
+    enterSpan.textContent = newDigit;
+
+    slot.innerHTML = '';
+    slot.appendChild(valueSpan);
+    slot.appendChild(exitSpan);
+    slot.appendChild(enterSpan);
+
+    // Get duration from CSS variable for the fallback timeout
+    const duration = parseInt(getComputedStyle(slot).getPropertyValue('--digit-duration')) || 300;
+
+    // Clean up after animation: replace with simple static digit (no visual change)
+    const onEnd = () => {
+        if (slot.contains(valueSpan)) {
+            slot.innerHTML = '<span class="digit-value">' + newDigit + '</span>';
+        }
+    };
+    enterSpan.addEventListener('animationend', onEnd, { once: true });
+
+    // Safety fallback
+    setTimeout(onEnd, duration + 100);
+}
+
 // --- Alerts / Flashing Logic ---
 function checkAlerts() {
     if (isOvertime) return;
@@ -188,10 +284,6 @@ function checkAlerts() {
     if (remainingSeconds === 120 || remainingSeconds === 60) {
         flash(4); // 4 flashes for 2min and 1min
     } else if (remainingSeconds <= 30 && remainingSeconds > 0) {
-        // Continuous flash logic could be handled by a class if we want, 
-        // but the requirement says "Continuous flashing until the clock hits zero".
-        // We'll toggle it every second or use a CSS animation. 
-        // CSS animation is cleaner for "continuous".
         if (remainingSeconds === 30) {
             document.body.classList.add('flash-continuous');
         }
@@ -209,7 +301,7 @@ function flash(count) {
             clearInterval(interval);
             document.body.classList.remove('flash');
         }
-    }, 1000); // 1s between color changes
+    }, 1000);
 }
 
 // --- Fullscreen ---
