@@ -79,6 +79,11 @@ function init() {
         });
     });
 
+    // Only allow digits and colon in duration input
+    durationInput.addEventListener('input', () => {
+        durationInput.value = durationInput.value.replace(/[^0-9:]/g, '');
+    });
+
     // Update timer immediately when user returns to the tab
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && timerInterval) {
@@ -312,20 +317,6 @@ function toggleFullscreen() {
         });
     } else {
         document.exitFullscreen();
-    }
-}
-
-registerSW();
-
-function registerSW() {
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').then(reg => {
-                console.log('SW registered:', reg);
-            }).catch(err => {
-                console.log('SW registration failed:', err);
-            });
-        });
     }
 }
 
