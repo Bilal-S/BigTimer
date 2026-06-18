@@ -8,8 +8,8 @@
     "publisher": "CN=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
   },
   "properties": {
-    "displayName": "BonCode",
-    "appName": "Big Timer"
+    "displayName": "BigTimer",
+    "appName": "BigTimer"
   },
   "version": "1.0.2.0",
   "architecture": "x64"
