@@ -1,4 +1,8 @@
 import './style.css'
+import '@fontsource/roboto-condensed/900.css'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/600.css'
+import '@fontsource/inter/700.css'
 
 // --- State ---
 let timerInterval = null;
@@ -44,6 +48,13 @@ function init() {
         's-tens': document.querySelector('.digit-slot[data-pos="s-tens"]'),
         's-ones': document.querySelector('.digit-slot[data-pos="s-ones"]'),
     };
+
+    // Support PWA shortcuts via ?duration=MM:SS query param
+    const urlParams = new URLSearchParams(window.location.search);
+    const shortcutDuration = urlParams.get('duration');
+    if (shortcutDuration && /^\d{1,2}:\d{2}$/.test(shortcutDuration)) {
+        currentSettings.duration = shortcutDuration;
+    }
 
     durationInput.value = currentSettings.duration;
     bgColorInput.value = currentSettings.customBg;

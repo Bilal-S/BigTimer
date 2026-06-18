@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help | Big Timer 🕒</title>
+  <meta name="description" content="Help and user guide for Big Timer, a high-visibility countdown timer for presenters and speakers." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/png" href="/app_icon.png" />
+  <style>
+    :root {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+      --accent-color: #3b82f6;
+      --muted-color: rgba(255, 255, 255, 0.6);
+      --border-color: rgba(255, 255, 255, 0.15);
+      --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .help-header {
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .help-header h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .help-header a.home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .help-header a.home-link:hover {
+      text-decoration: underline;
+    }
+
+    .meta {
+      color: var(--muted-color);
+      font-size: 0.9rem;
+    }
+
+    .toc {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .toc h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      color: var(--muted-color);
+      margin-bottom: 0.75rem;
+    }
+
+    .toc ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .toc a {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      margin-bottom: 2.25rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      scroll-margin-top: 1rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+      color: var(--muted-color);
+    }
+
+    p {
+      margin-bottom: 0.85rem;
+    }
+
+    ul,
+    ol {
+      margin: 0 0 0.85rem 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    strong {
+      color: var(--text-color);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .highlight {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight p {
+      margin-bottom: 0;
+      font-size: 1.05rem;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+      font-family: 'Courier New', monospace;
+    }
+
+    .steps {
+      counter-reset: step-counter;
+      list-style: none;
+      margin-left: 0;
+    }
+
+    .steps > li {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .steps > li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1.8rem;
+      height: 1.8rem;
+      background: var(--accent-color);
+      color: #000;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-color);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      color: var(--muted-color);
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: var(--accent-color);
+    }
+
+    @media (max-width: 600px) {
+      .help-header h1 {
+        font-size: 1.75rem;
+      }
+
+      body {
+        padding: 1.25rem 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header class="help-header">
+      <a href="/" class="home-link">← Back to Big Timer</a>
+      <h1>Big Timer Help</h1>
+      <p class="meta">
+        Everything you need to run a smooth, distraction-free countdown.
+      </p>
+    </header>
+
+    <div class="highlight">
+      <p>
+        <strong>Quick answer:</strong> Enter a time in MM:SS (for example, <code>05:00</code>),
+        pick a theme, and press <strong>START</strong>. The countdown fills the screen and flashes
+        at key moments so you can stay on time from across the room.
+      </p>
+    </div>
+
+    <nav class="toc">
+      <h2>Contents</h2>
+      <ul>
+        <li><a href="#overview">1. Overview</a></li>
+        <li><a href="#getting-started">2. Getting Started</a></li>
+        <li><a href="#themes">3. Themes and Colors</a></li>
+        <li><a href="#focus-mode">4. Focus Mode</a></li>
+        <li><a href="#alerts">5. Visual Alerts</a></li>
+        <li><a href="#fullscreen">6. Fullscreen Mode</a></li>
+        <li><a href="#pwa">7. Install and Offline Use</a></li>
+        <li><a href="#shortcuts">8. App Shortcuts</a></li>
+        <li><a href="#preferences">9. Preferences</a></li>
+        <li><a href="#troubleshooting">10. Troubleshooting</a></li>
+        <li><a href="#contact">11. Contact and Support</a></li>
+      </ul>
+    </nav>
+
+    <section id="overview">
+      <h2>1. Overview</h2>
+      <p>
+        Big Timer is a free, high-visibility Progressive Web App countdown timer built for public
+        speakers, presenters, and performers. Unlike a standard phone timer, Big Timer is designed
+        to be read from a distance and uses visual alerts (screen flashing) instead of sound, so
+        you can keep track of time without checking small numbers or listening for beeps.
+      </p>
+      <p>
+        The app runs entirely in your browser. There is no sign-in, no account, and no tracking.
+        <span class="badge">PWA</span>
+        <span class="badge">Offline ready</span>
+      </p>
+    </section>
+
+    <section id="getting-started">
+      <h2>2. Getting Started</h2>
+      <h3>Set a duration</h3>
+      <p>
+        Type your desired time in <strong>MM:SS</strong> format (for example, <code>05:00</code>
+        for 5 minutes) into the duration field, or tap one of the quick-set buttons:
+        <strong>1m, 2m, 3m, 5m, 10m, 20m, 30m</strong>.
+      </p>
+      <h3>Start the timer</h3>
+      <ol class="steps">
+        <li>Enter or choose your duration.</li>
+        <li>Select a theme (Dark, Light, or Custom).</li>
+        <li>Press the <strong>START</strong> button. The countdown will fill the screen.</li>
+      </ol>
+      <p>
+        You can also start a timer directly from a link or bookmark by adding a
+        <code>?duration=</code> parameter, for example <code>/?duration=05:00</code> for a
+        5-minute countdown.
+      </p>
+    </section>
+
+    <section id="themes">
+      <h2>3. Themes and Colors</h2>
+      <p>Choose the look that works best for your venue and lighting.</p>
+      <ul>
+        <li><strong>Dark</strong>: Black background with white text (default). Best for dark stages.</li>
+        <li><strong>Light</strong>: White background with black text. Best for bright rooms.</li>
+        <li><strong>Custom</strong>: Pick your own background and text colors using the color pickers.</li>
+      </ul>
+      <p>
+        High-contrast presets ensure readability in almost any lighting condition, from a dark
+        stage to a bright conference room.
+      </p>
+    </section>
+
+    <section id="focus-mode">
+      <h2>4. Focus Mode</h2>
+      <p>
+        When the timer starts, the interface strips away everything except the countdown. The
+        digits are shown in the largest possible font (using the Roboto Condensed font) to fill
+        the viewport, taking at least 90% of the screen.
+      </p>
+      <ul>
+        <li><strong>Exit button</strong>: Tap the small <code>×</code> to return to the configuration screen.</li>
+        <li><strong>Fullscreen button</strong>: Tap the <code>⛶</code> button for maximum visibility.</li>
+      </ul>
+    </section>
+
+    <section id="alerts">
+      <h2>5. Visual Alerts</h2>
+      <p>
+        To keep you on track without audio, Big Timer flashes the screen at key moments:
+      </p>
+      <ul>
+        <li><strong>2 minutes left</strong>: Screen flashes 4 times (200ms cycles).</li>
+        <li><strong>1 minute left</strong>: Screen flashes 4 times (200ms cycles).</li>
+        <li><strong>30 seconds left</strong>: Continuous flashing until the clock reaches zero.</li>
+        <li><strong>Overtime</strong>: After 00:00, the timer counts upward. The background turns
+          solid red and the text turns solid white to signal urgency.</li>
+      </ul>
+    </section>
+
+    <section id="fullscreen">
+      <h2>6. Fullscreen Mode</h2>
+      <p>
+        While the timer is running, press the <code>⛶</code> button to toggle fullscreen for a
+        borderless, immersive view. Press it again, or press <code>Esc</code>, to exit fullscreen.
+      </p>
+    </section>
+
+    <section id="pwa">
+      <h2>7. Install and Offline Use</h2>
+      <p>
+        Big Timer is a Progressive Web App, which means it can be installed to your device and
+        used without an internet connection once loaded.
+      </p>
+      <h3>How to install</h3>
+      <ul>
+        <li><strong>iOS</strong>: Open in Safari, tap the Share button, then choose
+          "Add to Home Screen".</li>
+        <li><strong>Android / Chrome</strong>: Open the browser menu and choose "Install App".</li>
+        <li><strong>Desktop</strong>: Installable as a desktop app via Chrome, Edge, or other
+          supported browsers.</li>
+      </ul>
+      <p>
+        After installation, Big Timer runs full screen and works offline.
+      </p>
+    </section>
+
+    <section id="shortcuts">
+      <h2>8. App Shortcuts</h2>
+      <p>
+        Once Big Timer is installed, quick-start shortcuts are available from the app icon on
+        supported devices. These open the app with a preset duration already loaded:
+      </p>
+      <ul>
+        <li><strong>5 min</strong> - starts a 5-minute countdown.</li>
+        <li><strong>10 min</strong> - starts a 10-minute countdown.</li>
+        <li><strong>30 min</strong> - starts a 30-minute countdown.</li>
+      </ul>
+      <p>
+        On desktop browsers, long-press or right-click the app icon to see these shortcuts.
+      </p>
+    </section>
+
+    <section id="preferences">
+      <h2>9. Preferences</h2>
+      <p>
+        Big Timer remembers your last used settings automatically, including your timer duration,
+        selected theme, and custom colors. These are stored locally in your browser using
+        <code>localStorage</code>, so they remain available the next time you open the app.
+      </p>
+      <p>
+        To reset your preferences, clear your browser's site data for Big Timer. See the
+        <a href="/privacy.html">Privacy Policy</a> for details on what is stored.
+      </p>
+    </section>
+
+    <section id="troubleshooting">
+      <h2>10. Troubleshooting</h2>
+      <h3>The timer is not full screen</h3>
+      <p>
+        Press the <code>⛶</code> button during focus mode. If that does not help, make sure your
+        browser supports fullscreen and that another tab or window is not already in fullscreen.
+      </p>
+      <h3>The digits look wrong</h3>
+      <p>
+        Big Timer uses the Roboto Condensed font. If it has not loaded yet (for example, on a slow
+        or offline first visit), the browser will show a fallback font. Once the font is cached,
+        it will always load correctly, even offline.
+      </p>
+      <h3>The app does not work offline</h3>
+      <p>
+        Make sure the page has loaded at least once while online so the service worker can cache
+        the app files. If problems persist, clear the site data and visit the app online again.
+      </p>
+      <h3>Screen does not flash</h3>
+      <p>
+        Visual alerts use color inversion. Some accessibility settings or browser extensions can
+        affect this. Try switching themes or disabling browser extensions that override page
+        colors.
+      </p>
+    </section>
+
+    <section id="contact">
+      <h2>11. Contact and Support</h2>
+      <p>
+        If you have questions, feedback, or want to report an issue, you can reach out:
+      </p>
+      <ul>
+        <li>Email: <a href="mailto:hello@boncode.net">hello@boncode.net</a></li>
+        <li>Website: <a href="https://www.boncode.net" target="_blank" rel="noopener">www.boncode.net</a></li>
+        <li>GitHub: <a href="https://github.com/Bilal-S/BigTimer" target="_blank" rel="noopener">github.com/Bilal-S/BigTimer</a></li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <p>
+        &copy; 2026 Bilal Soylu -
+        <a href="https://www.boncode.net" target="_blank" rel="noopener">Boncode</a> -
+        <a href="https://github.com/Bilal-S/BigTimer" target="_blank" rel="noopener">GitHub</a> -
+        <a href="/privacy.html">Privacy</a> -
+        <a href="/">Big Timer</a>
+      </p>
+    </footer>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | Big Timer 🕒</title>
+  <meta name="description" content="Privacy Policy for Big Timer. We do not collect any personal data." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/png" href="/app_icon.png" />
+  <style>
+    :root {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+      --accent-color: #3b82f6;
+      --muted-color: rgba(255, 255, 255, 0.6);
+      --border-color: rgba(255, 255, 255, 0.15);
+      --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-family);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .policy-header {
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .policy-header h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .policy-header a.home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .policy-header a.home-link:hover {
+      text-decoration: underline;
+    }
+
+    .meta {
+      color: var(--muted-color);
+      font-size: 0.9rem;
+    }
+
+    .toc {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .toc h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      color: var(--muted-color);
+      margin-bottom: 0.75rem;
+    }
+
+    .toc ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .toc a {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      margin-bottom: 2.25rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      scroll-margin-top: 1rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+      color: var(--muted-color);
+    }
+
+    p {
+      margin-bottom: 0.85rem;
+    }
+
+    ul,
+    ol {
+      margin: 0 0 0.85rem 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    strong {
+      color: var(--text-color);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .highlight {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight p {
+      margin-bottom: 0;
+      font-size: 1.05rem;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+      font-family: 'Courier New', monospace;
+    }
+
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      color: var(--muted-color);
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: var(--accent-color);
+    }
+
+    @media (max-width: 600px) {
+      .policy-header h1 {
+        font-size: 1.75rem;
+      }
+
+      body {
+        padding: 1.25rem 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header class="policy-header">
+      <a href="/" class="home-link">← Back to Big Timer</a>
+      <h1>Privacy Policy</h1>
+      <p class="meta">
+        Last updated: June 18, 2026<br />
+        This policy applies to the Big Timer web app at
+        <a href="https://bigtimer.boncode.net">bigtimer.boncode.net</a>.
+      </p>
+    </header>
+
+    <div class="highlight">
+      <p>
+        <strong>Short version:</strong> Big Timer does not collect, store, or share any of your
+        personal data. No accounts, no analytics, no third-party services, no external requests.
+        Your settings stay on your device. That is the whole story.
+      </p>
+    </div>
+
+    <nav class="toc">
+      <h2>Contents</h2>
+      <ul>
+        <li><a href="#overview">1. Overview</a></li>
+        <li><a href="#data-we-collect">2. Information We Collect</a></li>
+        <li><a href="#local-storage">3. Local Storage</a></li>
+        <li><a href="#third-party">4. Third-Party Services</a></li>
+        <li><a href="#cookies">5. Cookies</a></li>
+        <li><a href="#service-worker">6. Service Worker and Offline Use</a></li>
+        <li><a href="#children">7. Children's Privacy</a></li>
+        <li><a href="#rights">8. Your Rights</a></li>
+        <li><a href="#changes">9. Changes to This Policy</a></li>
+        <li><a href="#contact">10. Contact</a></li>
+      </ul>
+    </nav>
+
+    <section id="overview">
+      <h2>1. Overview</h2>
+      <p>
+        Big Timer is a free, browser-based countdown timer built for presenters and speakers.
+        It runs entirely in your web browser. There is no user account, no sign-in, no database,
+        and no server-side processing of your activity.
+      </p>
+      <p>
+        We built Big Timer with a privacy-first principle: the app should work without ever needing
+        to know who you are or what you do.
+      </p>
+    </section>
+
+    <section id="data-we-collect">
+      <h2>2. Information We Collect</h2>
+      <p>
+        <strong>We do not collect any personal information.</strong> Specifically, Big Timer:
+      </p>
+      <ul>
+        <li>Does not ask for your name, email, phone number, or any other identifier.</li>
+        <li>Does not use analytics tools (no Google Analytics, no fingerprinting, no telemetry).</li>
+        <li>Does not record your IP address or browsing behavior.</li>
+        <li>Does not use tracking pixels or advertising SDKs.</li>
+        <li>Does not transmit your timer settings or theme choices to any server.</li>
+      </ul>
+      <p>
+        The app has no backend of its own, so there is nowhere for your data to be sent even if it
+        tried to.
+      </p>
+    </section>
+
+    <section id="local-storage">
+      <h2>3. Local Storage</h2>
+      <p>
+        Big Timer uses your browser's <code>localStorage</code> to remember your preferences between
+        visits. This includes:
+      </p>
+      <ul>
+        <li>Your last timer duration (for example, 05:00).</li>
+        <li>Your selected theme (Dark, Light, or Custom).</li>
+        <li>Your custom background and text colors.</li>
+      </ul>
+      <h3>What this means for you</h3>
+      <ul>
+        <li>This data is stored only on your device, inside your browser.</li>
+        <li>It is never sent to us or to any third party.</li>
+        <li>You can clear it at any time by clearing your browser's site data for
+          <code>bigtimer.boncode.net</code>, or by uninstalling the app.</li>
+      </ul>
+    </section>
+
+    <section id="third-party">
+      <h2>4. Third-Party Services</h2>
+      <p>
+        Big Timer does not load any third-party resources. All fonts (Roboto Condensed for the timer
+        and Inter for the interface) are bundled directly with the app and served from the same origin.
+        There are no requests to Google Fonts, CDNs, analytics providers, or any other external
+        service.
+      </p>
+      <p>
+        This means your browser never contacts any third-party server while using Big Timer.
+      </p>
+    </section>
+
+    <section id="cookies">
+      <h2>5. Cookies</h2>
+      <p>
+        Big Timer does not use cookies. We do not set any cookies for tracking, authentication,
+        advertising, or any other purpose.
+      </p>
+    </section>
+
+    <section id="service-worker">
+      <h2>6. Service Worker and Offline Use</h2>
+      <p>
+        As a Progressive Web App, Big Timer installs a service worker that caches the app's files
+        (HTML, CSS, JavaScript, and images) on your device. This allows the timer to keep working
+        when you are offline.
+      </p>
+      <p>
+        These cached files are static app resources only. They contain no information about you and
+        are not reported back to us. You can clear the cache at any time through your browser
+        settings.
+      </p>
+    </section>
+
+    <section id="children">
+      <h2>7. Children's Privacy</h2>
+      <p>
+        Big Timer does not collect any personal data from anyone, including children. The app is
+        suitable for use by people of all ages. Because we collect nothing, the protections required
+        under laws such as COPPA are inherently satisfied.
+      </p>
+    </section>
+
+    <section id="rights">
+      <h2>8. Your Rights</h2>
+      <p>Because we do not collect or process your personal data, you do not need to exercise data
+        access or deletion rights with us. If you want to remove all traces of your use of Big Timer,
+        simply:</p>
+      <ol>
+        <li>Clear your browser's site data for <code>bigtimer.boncode.net</code> (this removes the
+          localStorage preferences).</li>
+        <li>Uninstall the app from your device (this removes the cached service-worker files).</li>
+      </ol>
+      <p>
+        If you are in a region covered by the GDPR, CCPA, or similar regulations, rest assured there
+        is no personal data of yours in our possession to access, correct, or delete.
+      </p>
+    </section>
+
+    <section id="changes">
+      <h2>9. Changes to This Policy</h2>
+      <p>
+        If we ever change how Big Timer handles data, we will update this page and revise the "Last
+        updated" date at the top. Because the app is open source, any change to data handling would
+        also be visible in the
+        <a href="https://github.com/Bilal-S/BigTimer" target="_blank" rel="noopener">source code on GitHub</a>.
+      </p>
+    </section>
+
+    <section id="contact">
+      <h2>10. Contact</h2>
+      <p>
+        If you have any questions about this Privacy Policy or about Big Timer, you can reach out:
+      </p>
+      <ul>
+        <li>Email: <a href="mailto:hello@boncode.net">hello@boncode.net</a></li>
+        <li>Website: <a href="https://www.boncode.net" target="_blank" rel="noopener">www.boncode.net</a></li>
+        <li>GitHub: <a href="https://github.com/Bilal-S/BigTimer" target="_blank" rel="noopener">github.com/Bilal-S/BigTimer</a></li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <p>
+        &copy; 2026 Bilal Soylu -
+        <a href="https://www.boncode.net" target="_blank" rel="noopener">Boncode</a> -
+        <a href="https://github.com/Bilal-S/BigTimer" target="_blank" rel="noopener">GitHub</a> -
+        <a href="/help.html">Help</a> -
+        <a href="/">Big Timer</a>
+      </p>
+    </footer>
+  </div>
+</body>
+
+</html>

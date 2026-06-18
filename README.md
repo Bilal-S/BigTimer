@@ -81,9 +81,10 @@ Your last used settings are automatically saved and restored when you return to 
 ## 🛠 Tech Stack
 - **Frontend**: HTML5, CSS3, JavaScript ES6 Modules
 - **Build Tool**: Vite
-- **Styling**: CSS Variables for easy theme switching, Roboto Condensed font for timer display
+- **Styling**: CSS Variables for easy theme switching, Roboto Condensed font for timer display (self-hosted via Fontsource)
 - **Storage**: localStorage API for user preferences persistence
 - **PWA Features**: Service Worker (via `/sw.js`), Web App Manifest (via `/manifest.json`)
+- **Fonts**: Inter (UI) and Roboto Condensed (timer) bundled locally; no external font requests
 - **Hosting**: Any static site host supports PWAs
 
 ## 📱 Progressive Web App

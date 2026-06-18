@@ -1,0 +1,4 @@
+- Use new PWA images 1920x1080
+- Privacy Page
+- App description for Store
+- Help from bottom link

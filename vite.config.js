@@ -5,15 +5,21 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['app_icon.png', 'BigTimer.png', 'BigTimer2.png'],
+      includeAssets: ['app_icon.png', 'BigTimer.png', 'BigTimer2.png', 'BigTimer3.png'],
       manifest: {
+        id: '/',
         name: 'Big Timer',
         short_name: 'Big Timer',
         description: 'High-visibility, distraction-free timer for presenters.',
         start_url: '/',
+        scope: '/',
         display: 'standalone',
+        orientation: 'any',
+        lang: 'en-US',
+        dir: 'ltr',
         background_color: '#000000',
         theme_color: '#000000',
+        categories: ['productivity', 'utilities'],
         icons: [
           {
             src: '/app_icon-192.png',
@@ -40,45 +46,64 @@ export default defineConfig({
             purpose: 'any'
           }
         ],
+        shortcuts: [
+          {
+            name: 'Start 5-minute timer',
+            short_name: '5 min',
+            description: 'Quickly start a 5-minute countdown',
+            url: '/?duration=05:00',
+            icons: [{ src: '/app_icon-192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Start 10-minute timer',
+            short_name: '10 min',
+            description: 'Quickly start a 10-minute countdown',
+            url: '/?duration=10:00',
+            icons: [{ src: '/app_icon-192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Start 30-minute timer',
+            short_name: '30 min',
+            description: 'Quickly start a 30-minute countdown',
+            url: '/?duration=30:00',
+            icons: [{ src: '/app_icon-192.png', sizes: '192x192' }]
+          }
+        ],
         screenshots: [
           {
             src: '/BigTimer.png',
-            sizes: '918x820',
+            sizes: '1920x1080',
             type: 'image/png',
             form_factor: 'wide',
-            label: 'Big Timer in focus mode on desktop'
+            label: 'Big Timer configuration screen on desktop'
           },
           {
             src: '/BigTimer2.png',
-            sizes: '768x723',
+            sizes: '1920x1080',
             type: 'image/png',
-            label: 'Big Timer in focus mode on mobile'
+            form_factor: 'wide',
+            label: 'Big Timer countdown in focus mode'
+          },
+          {
+            src: '/BigTimer3.png',
+            sizes: '1920x1080',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Big Timer overtime alert state'
           }
         ]
       },
       workbox: {
         navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/privacy/, /^\/help/],
         runtimeCaching: [
           {
-            // Cache Google Fonts CSS
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'google-fonts-stylesheets',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
-            }
-          },
-          {
-            // Cache Google Fonts font files (long-term)
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            urlPattern: /\.(?:woff2?|ttf|eot)$/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts-webfonts',
+              cacheName: 'font-assets',
               expiration: {
-                maxEntries: 10,
+                maxEntries: 30,
                 maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
               },
               cacheableResponse: {
