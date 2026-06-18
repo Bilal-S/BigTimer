@@ -1,3 +1,12 @@
 node_modules
 dist
 
+# MSIX packaging artifacts (local + CI outputs)
+packaging/build/
+packaging/assets/*
+!packaging/assets/.gitkeep
+packaging/package.config.json
+packaging/*.pfx
+packaging/*.msix
+packaging/*.appx
+packaging/*.cer
