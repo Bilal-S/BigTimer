@@ -8,8 +8,8 @@ export default defineConfig({
       includeAssets: ['app_icon.png', 'BigTimer.png', 'BigTimer2.png', 'BigTimer3.png'],
       manifest: {
         id: '/',
-        name: 'Big Timer',
-        short_name: 'Big Timer',
+        name: 'BigTimer',
+        short_name: 'BigTimer',
         description: 'High-visibility, distraction-free timer for presenters.',
         start_url: '/',
         scope: '/',

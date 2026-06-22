@@ -89,7 +89,7 @@ The MSIX version is read from `package.config.json` (`version` field, default `"
 4. Fill in:
    - **Package ID / Identity Name:** `BonCode.BigTimer`
    - **Publisher:** `CN=6A41398C-286A-45C1-A8DF-76B4217CB918`
-   - **Display name:** `Big Timer`
+   - **Display name:** `BigTimer`
    - **Version:** `1.0.2.0`
 5. Download the generated `.zip` — contains `appx/` and `msix/`.
 6. For local testing, install the included test cert to `Trusted People`, then `Add-AppxPackage` the MSIX.
@@ -100,7 +100,7 @@ The MSIX version is read from `package.config.json` (`version` field, default `"
 ## Submitting to the Microsoft Store
 
 1. Sign in at https://partner.microsoft.com.
-2. Open the reserved **Big Timer** product → **Start submission**.
+2. Open the reserved **BigTimer** product → **Start submission**.
 3. Under **Packages**, upload `packaging/build/BonCode.BigTimer_<version>_x64.msix` (or the PWA Builder MSIX).
 4. Complete Store listing, age ratings, availability, and **Submit**.
 5. Certification typically takes hours to a few days. Microsoft re-signs the package — **you do not need your own signing certificate for Store distribution.**

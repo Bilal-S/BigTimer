@@ -10,3 +10,6 @@ packaging/*.pfx
 packaging/*.msix
 packaging/*.appx
 packaging/*.cer
+
+# local dev
+.dev

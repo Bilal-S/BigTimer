@@ -2,7 +2,7 @@
   "$schema": "./package.config.schema.json",
   "comment": "Copy this file to package.config.json and fill in your real Partner Center identity. package.config.json is gitignored.",
   "host": "https://bigtimer.boncode.net/",
-  "startPage": "https://bigtimer.boncode.net/",
+  "startPage": "index.html",
   "identity": {
     "name": "YourPublisher.BigTimer",
     "publisher": "CN=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"

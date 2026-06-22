@@ -1,15 +1,22 @@
 /**
- * Builds an MSIX package for the Microsoft Store from the BigTimer PWA.
+ * Builds a fully self-contained MSIX package for the Microsoft Store / local install
+ * from the BigTimer PWA.
  *
  * Flow:
  *  1. Read packaging/package.config.json (gitignored) — real identity.
- *  2. Substitute placeholders in packaging/AppxManifest.xml → packaging/build/AppxManifest.xml.
+ *  2. Run `vite build` to produce a fresh dist/ (local web content).
  *  3. Ensure icon assets exist (calls generate-icons.mjs if missing).
- *  4. Stage the package layout (manifest + assets/) under packaging/build/stage/.
- *  5. Run MakeAppx.exe pack → packaging/build/<Identity>_<version>_x64.msix.
- *  6. Optional local install testing:
- *     - --sign-local: MakeCert + signtool with a self-signed cert (gitignored),
- *       plus prints the cert-install steps. Store submission does NOT need this.
+ *  4. Substitute placeholders in packaging/AppxManifest.xml.
+ *  5. Stage the package layout under packaging/build/stage/:
+ *     - AppxManifest.xml
+ *     - assets/   (Store-required tile/splash icons)
+ *     - dist/ contents copied to the stage root (index.html, JS, CSS, fonts, SW, ...)
+ *  6. Run MakeAppx.exe pack → packaging/build/<Identity>_<version>_x64.msix
+ *
+ * The package is UNSIGNED. Install locally with:
+ *   Add-AppxPackage -Path "<...>.msix" -AllowUnsigned
+ *
+ * For Store submission, upload the unsigned MSIX via Partner Center; Microsoft re-signs it.
  *
  * Requires Windows SDK tools on PATH or at the standard install location.
  */
@@ -30,6 +37,7 @@ const BUILD_DIR = path.join(PKG_DIR, 'build');
 const STAGE_DIR = path.join(BUILD_DIR, 'stage');
 const ASSETS_DIR = path.join(PKG_DIR, 'assets');
 const STAGE_ASSETS_DIR = path.join(STAGE_DIR, 'assets');
+const DIST_DIR = path.join(root, 'dist');
 
 const PACKAGE_JSON = JSON.parse(
   await fs.readFile(path.join(root, 'package.json'), 'utf8')
@@ -101,6 +109,12 @@ function run(toolPath, args, opts = {}) {
   execSync(cmd, { stdio: 'inherit', ...opts });
 }
 
+function runNpm(scriptName) {
+  const cmd = `npm run ${scriptName}`;
+  log(`$ ${cmd}`);
+  execSync(cmd, { stdio: 'inherit', cwd: root });
+}
+
 async function substituteManifest(config) {
   const tpl = await fs.readFile(MANIFEST_TEMPLATE, 'utf8');
   const version = (config.version || `${PACKAGE_JSON.version}.0`).replace(/-\d+$/, '');
@@ -111,7 +125,7 @@ async function substituteManifest(config) {
     .replaceAll('{{APP_NAME}}', config.properties.appName)
     .replaceAll('{{PUBLISHER_DISPLAY_NAME}}', config.properties.displayName)
     .replaceAll('{{START_PAGE}}', config.startPage)
-    .replaceAll('{{APP_DESCRIPTION}}', PACKAGE_JSON.title || config.properties.appName);
+    .replaceAll('{{APP_DESCRIPTION}}', config.properties.appName);
   return { content: out, version };
 }
 
@@ -125,79 +139,87 @@ async function ensureAssets() {
   }
 }
 
+/** Recursively copy a directory's contents into a destination directory. */
+async function copyDirContents(src, dest) {
+  await fs.mkdir(dest, { recursive: true });
+  const entries = await fs.readdir(src, { withFileTypes: true });
+  for (const entry of entries) {
+    const s = path.join(src, entry.name);
+    const d = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      await copyDirContents(s, d);
+    } else {
+      await fs.copyFile(s, d);
+    }
+  }
+}
+
+async function rmWithRetries(target, retries = 3, delayMs = 500) {
+  // On Windows, rm can EPERM on locked files. Strategy:
+  //  1. Try rm directly.
+  //  2. If it fails, rename the locked dir aside and delete that asynchronously.
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      await fs.rm(target, { recursive: true, force: true });
+      return;
+    } catch (err) {
+      if (attempt === retries) {
+        // Final fallback: move the locked dir aside, best-effort delete
+        try {
+          const moved = `${target}.stale-${Date.now()}`;
+          await fs.rename(target, moved);
+          fs.rm(moved, { recursive: true, force: true }).catch(() => {});
+          return;
+        } catch (err2) {
+          throw err;
+        }
+      }
+      log(`  ⚠ rm failed (attempt ${attempt}/${retries}): ${err.code} — retrying in ${delayMs}ms...`);
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+}
+
 async function stagePackage(config) {
-  await fs.rm(BUILD_DIR, { recursive: true, force: true });
+  // Fresh stage dir (retry on Windows file-lock issues)
+  await rmWithRetries(BUILD_DIR);
   await fs.mkdir(STAGE_DIR, { recursive: true });
   await fs.mkdir(STAGE_ASSETS_DIR, { recursive: true });
 
+  // 1. Manifest
   const { content, version } = await substituteManifest(config);
   await fs.writeFile(path.join(STAGE_DIR, 'AppxManifest.xml'), content, 'utf8');
 
-  // copy assets
-  const files = await fs.readdir(ASSETS_DIR);
+  // 2. Store tile/splash assets → stage/assets/
+  const assetFiles = await fs.readdir(ASSETS_DIR);
   await Promise.all(
-    files
+    assetFiles
       .filter((f) => f.endsWith('.png'))
       .map((f) => fs.copyFile(path.join(ASSETS_DIR, f), path.join(STAGE_ASSETS_DIR, f)))
   );
-  return { version };
-}
 
-// ---------- signing (local testing only) ----------
-
-async function signLocal(msixPath, config) {
-  const makeCert = await findSdkTool('MakeCert.exe');
-  const signtool = await findSdkTool('signtool.exe');
-  if (!makeCert || !signtool) {
-    log(
-      '⚠ MakeCert.exe or signtool.exe not found. Skipping local signing.\n' +
-        '  Install the Windows SDK. The MSIX is still built (unsigned) at:\n  ' +
-        path.relative(root, msixPath)
-    );
-    return;
+  // 3. Local web content (dist/) → stage root
+  if (!existsSync(DIST_DIR)) {
+    log(`✗ dist/ not found at ${path.relative(root, DIST_DIR)}. Run "npm run build" first.`);
+    process.exit(3);
   }
+  log('• Copying dist/ (local web content) into package ...');
+  await copyDirContents(DIST_DIR, STAGE_DIR);
 
-  const certName = config.identity.name;
-  const pfxPath = path.join(PKG_DIR, `${certName}.pfx`);
-  const cerPath = path.join(PKG_DIR, `${certName}.cer`);
-  const password = 'bigtimer-local'; // local-testing only; pfx is gitignored
-
-  log('\n🔐 Creating local self-signed certificate (gitignored)...');
-  run(makeCert, [
-    '/n', `"CN=${certName}"`,
-    '/r',
-    '/h', '0',
-    '/eku', '1.3.6.1.5.5.7.3.3',
-    '/pe',
-    `/sv`, `"${pfxPath}"`,
-    `"${cerPath}"`,
-  ].concat(password ? ['/pv', password] : []), { cwd: PKG_DIR });
-
-  log('\n✍️  Signing MSIX with signtool ...');
-  run(signtool, [
-    'sign',
-    '/fd', 'SHA256',
-    '/f', `"${pfxPath}"`,
-    password ? ['/p', password] : [],
-    `"${msixPath}"`,
-  ].flat());
-
-  log(`\n✓ Signed. For local install, run in an admin PowerShell:\n` +
-      `  Import-Certificate -FilePath "${path.resolve(cerPath)}" -CertStoreLocation Cert:\\LocalMachine\\Root\n` +
-      `  Add-AppxPackage -Path "${path.resolve(msixPath)}"`);
+  return { version };
 }
 
 // ---------- main ----------
 
 async function main() {
-  const argv = process.argv.slice(2);
-  const signLocalFlag = argv.includes('--sign-local');
-
   log('==> Loading package config ...');
   const config = await loadConfig();
   log(`    Identity : ${config.identity.name}`);
   log(`    Publisher: ${config.identity.publisher}`);
   log(`    StartPage: ${config.startPage}`);
+
+  log('\n==> Building web assets (vite build) ...');
+  runNpm('build');
 
   log('\n==> Ensuring icon assets ...');
   await ensureAssets();
@@ -231,15 +253,12 @@ async function main() {
   ]);
 
   log(`\n✓ Built: ${path.relative(root, msixPath)}`);
-
-  if (signLocalFlag) {
-    await signLocal(msixPath, config);
-  } else {
-    log(
-      '\nℹ️  Unsigned build. For Store submission, upload this MSIX via Partner Center\n' +
-        '   (Microsoft re-signs it). For local install testing, re-run with --sign-local.'
-    );
-  }
+  log(
+    '\nℹ️  Unsigned build. Install locally (Developer Mode must be ON) with:\n' +
+      `   Add-AppxPackage -Path "${path.resolve(msixPath)}" -AllowUnsigned\n\n` +
+      '   For Store submission, upload this MSIX via Partner Center\n' +
+      '   (Microsoft re-signs it).'
+  );
 }
 
 main().catch((err) => {

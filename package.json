@@ -3,7 +3,7 @@
   "title": "BigTimer",
   "author": "Bilal Soylu",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -11,8 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "icons:gen": "node scripts/generate-icons.mjs",
-    "package:win": "node scripts/package-win.mjs",
-    "package:win:signed": "node scripts/package-win.mjs --sign-local"
+    "package:win": "node scripts/package-win.mjs"
   },
   "devDependencies": {
     "image-size": "^2.0.2",
